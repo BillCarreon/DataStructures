@@ -27,7 +27,7 @@ public class IntArrayList {
 	 */
 	public int size() {
 		// your code here
-		return -1;
+		return size;
 	}
 
 	/**
