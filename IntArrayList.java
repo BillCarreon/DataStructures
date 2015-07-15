@@ -21,12 +21,20 @@ public class IntArrayList {
 		}
 	}
 
+	private int[] resize(int[] array){
+		int arr_len = array.length;
+		int[] new_array = new int[2*arr_len];
+		for(int i = 0; i < arr_len; i++){
+			new_array[i] = array[i];
+		}
+		return new_array;
+	}
+
 	/**
 	 * Return the number of elements in this list
 	 * @return the number of elements in this list
 	 */
 	public int size() {
-		// your code here
 		return size;
 	}
 
@@ -36,7 +44,14 @@ public class IntArrayList {
 	 * @param val is the element to be added to the end of this list
 	 */
 	public void add(int val) {
-		// your code here
+		int arr_len = arr.length;
+		
+		if(size == arr_len){
+			arr = resize(arr);		
+		}
+
+		arr[size] = val;
+		size++;
 	}
 
 	/**
@@ -45,7 +60,18 @@ public class IntArrayList {
 	 * @param val is the element to be added to the front of this list
 	 */
 	public void addFront(int val) {
-		// your code here
+		int arr_len = arr.length;
+		
+		if(size == arr_len){
+			arr = resize(arr);
+			arr_len = arr.length;		
+		}
+
+		for(int i = size; i >= 1; i--){
+			arr[i] = arr[i-1];
+		}
+		arr[0] = val;
+		size++;
 	}
 
 	/**

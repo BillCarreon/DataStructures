@@ -110,13 +110,16 @@ public class IntArrayListTests {
 		list.addFront(-1);
 		test("addFront 2", list, new IntArrayList(new int[]{-1, 9, 10}));
 
+		list.add(5);
+		test("addFront 3", list, new IntArrayList(new int[]{-1, 9, 10, 5}));
+
 		list = new IntArrayList();
 		arr = new int[10000];
 		for(int i = 0; i < 10000; ++i) {
 			list.addFront(i);
 			arr[10000 - i - 1] = i;
 		}
-		test("addFront 3", list, new IntArrayList(arr));
+		test("addFront 4", list, new IntArrayList(arr));
 
 
 		System.out.println();
