@@ -97,7 +97,7 @@ public class IntArrayList {
 	 * @param pos is the position (index) in the list at which to insert val
 	 */
 	public void set(int pos, int val) {
-		// your code here
+		arr[pos] = val;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class IntArrayList {
 	 */
 	public int get(int pos) {
 		// your code here
-		return -1;
+		return arr[pos];
 	}
 
 	/**
