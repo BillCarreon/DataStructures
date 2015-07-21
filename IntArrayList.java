@@ -85,7 +85,7 @@ public class IntArrayList {
 		for(int i = size; i == pos; i --){	
 			arr[i] = arr[i-1];
 		}
-		arr[pos] = val
+		arr[pos] = val;
 		size++;
 	}
 
