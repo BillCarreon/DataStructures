@@ -82,7 +82,14 @@ public class IntArrayList {
 	 * @param pos is the position (index) in the list at which to insert val
 	 */
 	public void insert(int pos, int val) {
-		for(int i = size; i == pos; i --){	
+		int arr_len = arr.length;
+
+		if(size == arr_len){
+			arr = resize(arr);
+			arr_len = arr.length;		
+		}
+
+		for(int i = size; i > pos; i--){
 			arr[i] = arr[i-1];
 		}
 		arr[pos] = val;
