@@ -125,7 +125,6 @@ public class IntArrayList {
 	 * @return true if an element was removed, false otherwise
 	 */
 	public boolean remove(int val) {
-		// your code here
 		return false;
 	}
 
@@ -209,7 +208,8 @@ public class IntArrayList {
 	 * post: size() = 0
 	 */
 	public void clear() {
-		// your code here
+		arr = new int[10];
+		size = 0;
 	}
 
 	/**
