@@ -125,6 +125,19 @@ public class IntArrayList {
 	 * @return true if an element was removed, false otherwise
 	 */
 	public boolean remove(int val) {
+		int[] new_arr = new int[arr.length];
+		
+		for(int i = 0; i < size; i++){
+			new_arr[i] = arr[i];
+			if(i == val){
+				for(int x = i; x < size-1; x++){
+					new_arr[x] = arr[x+1];
+				}
+				size--;
+				arr = new_arr;
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -186,7 +199,10 @@ public class IntArrayList {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(int val) {
-		// your code here
+		int idx_counter = 0;
+		for(int i = 0; i < val; i++){
+			return i;
+		}
 		return -1;
 	}
 
