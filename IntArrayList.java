@@ -127,9 +127,9 @@ public class IntArrayList {
 	public boolean remove(int val) {
 		int[] new_arr = new int[arr.length];
 		
-		for(int i = 0; i < size; i++){
+		for(int i = 0; i < size-1; i++){
 			new_arr[i] = arr[i];
-			if(i == val){
+			if(arr[i] == val){
 				for(int x = i; x < size-1; x++){
 					new_arr[x] = arr[x+1];
 				}
