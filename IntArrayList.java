@@ -60,18 +60,7 @@ public class IntArrayList {
 	 * @param val is the element to be added to the front of this list
 	 */
 	public void addFront(int val) {
-		int arr_len = arr.length;
-		
-		if(size == arr_len){
-			arr = resize(arr);
-			arr_len = arr.length;		
-		}
-
-		for(int i = size; i >= 1; i--){
-			arr[i] = arr[i-1];
-		}
-		arr[0] = val;
-		size++;
+		this.insert(0, val);
 	}
 
 	/**
@@ -114,7 +103,6 @@ public class IntArrayList {
 	 * @return the element at the given index in this list
 	 */
 	public int get(int pos) {
-		// your code here
 		return arr[pos];
 	}
 
@@ -124,17 +112,13 @@ public class IntArrayList {
 	 * @param val is the element to be removed
 	 * @return true if an element was removed, false otherwise
 	 */
-	public boolean remove(int val) {
-		int[] new_arr = new int[arr.length];
-		
-		for(int i = 0; i < size-1; i++){
-			new_arr[i] = arr[i];
+	public boolean remove(int val) {		
+		for(int i = 0; i < size; i++){
 			if(arr[i] == val){
 				for(int x = i; x < size-1; x++){
-					new_arr[x] = arr[x+1];
+					arr[x] = arr[x+1];
 				}
 				size--;
-				arr = new_arr;
 				return true;
 			}
 		}
@@ -147,10 +131,54 @@ public class IntArrayList {
 	 * @param val is the element to be removed
 	 * @return true if an element was removed, false otherwise
 	 */
-	public boolean removeAll(int val) {
-		// your code here
-		return false;
+	public boolean removeAll(int val){
+		int i = 0;
+		int j = 0;
+
+		while(j < size){
+			if(arr[j] != val){
+				arr[i] = arr[j];
+				i++;
+			}
+			j++;
+		}
+		size = i;
+		return i != j;
 	}
+
+	// public boolean removeAll2(int val) {
+	// 	boolean changed false;
+	// 	while(this.remove(val)) {
+	// 		changed = true;
+	// 	}
+	// 	return changed;
+	// }
+
+	// public boolean removeAll3(int val) {
+	// 	boolean changed = false;
+	// 	int i = this.indexOf(val);
+	// 	while(i != -1){
+	// 		this.removePos(i);
+	// 		i = this.indexOf(val);
+	// 		changed = true;
+	// 	}
+	// 	return changed;
+	// }
+
+	// public boolean removeAll3(int val) {
+	// 	boolean changed = false;
+	// 	for(int i = 0; i < size; i++){
+	// 		if(arr[i] == val){
+	// 			for(int x = i; x < size-1; x++){
+	// 				arr[x] = arr[x+1];
+	// 			}
+	// 			size--;
+	// 			changed = true;
+	// 			i--;
+	// 		}
+	// 	}
+	// 	return changed;
+	// }
 
 	/**
 	 * Remove the element at a given position, and return that element.
@@ -159,8 +187,12 @@ public class IntArrayList {
 	 * @return the removed element
 	 */
 	public int removePos(int pos) {
-		// your code here
-		return -1;
+		int val = arr[pos];
+		for(int i = pos; i < size-1; i++){
+			arr[i] = arr[i+1];
+		}
+		size--;
+		return val;
 	}
 
 	/**
@@ -199,9 +231,10 @@ public class IntArrayList {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(int val) {
-		int idx_counter = 0;
-		for(int i = 0; i < val; i++){
-			return i;
+		for(int i = 0; i < size; i++){
+			if(arr[i] == val){
+				return i;
+			}
 		}
 		return -1;
 	}
@@ -224,7 +257,7 @@ public class IntArrayList {
 	 * post: size() = 0
 	 */
 	public void clear() {
-		arr = new int[10];
+		// arr = new int[10];
 		size = 0;
 	}
 
