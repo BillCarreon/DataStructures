@@ -201,8 +201,9 @@ public class IntArrayList {
 	 * @return the removed element
 	 */
 	public int removeFront() {
-		// your code here
-		return -1;
+		int val = arr[0];
+		removePos(0);
+		return val;
 	}
 
 	/**
@@ -211,8 +212,8 @@ public class IntArrayList {
 	 * @return the removed element
 	 */
 	public int removeBack() {
-		// your code here
-		return -1;
+		size--;
+		return arr[size];
 	}
 
 	/**
@@ -222,7 +223,15 @@ public class IntArrayList {
 	 * @param end is the ending index of the range, exclusive
 	 */
 	public void removeRange(int start, int end) {
-		// your code here
+		int i = start;
+		int j = end;
+
+		while(j < size){
+			arr[i] = arr[j];
+			i++;
+			j++;
+		}
+		size = i;
 	}
 
 	/**
@@ -248,7 +257,11 @@ public class IntArrayList {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(int val, int pos) {
-		// your code here
+		for(int i = pos; i < size; i++){
+			if(arr[i] == val){
+				return i;
+			}
+		}
 		return -1;
 	}
 
@@ -270,8 +283,11 @@ public class IntArrayList {
 	 * @return new IntArrayList
 	 */
 	public IntArrayList getSubList(int start, int end) {
-		// your code here
-		return new IntArrayList();
+		IntArrayList new_arr = new IntArrayList();
+		for(int i = start; i < end; i ++){
+			new_arr.add(arr[i]);
+		}
+		return new_arr;
 	}
 
 	/**
