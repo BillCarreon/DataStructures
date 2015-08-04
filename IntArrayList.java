@@ -135,7 +135,7 @@ public class IntArrayList {
 		int i = 0;
 		int j = 0;
 
-		while(j < size){
+		while(j < size()){
 			if(arr[j] != val){
 				arr[i] = arr[j];
 				i++;
@@ -188,7 +188,7 @@ public class IntArrayList {
 	 */
 	public int removePos(int pos) {
 		int val = arr[pos];
-		for(int i = pos; i < size-1; i++){
+		for(int i = pos; i < size()-1; i++){
 			arr[i] = arr[i+1];
 		}
 		size--;
@@ -285,7 +285,7 @@ public class IntArrayList {
 	public IntArrayList getSubList(int start, int end) {
 		IntArrayList new_arr = new IntArrayList();
 		for(int i = start; i < end; i ++){
-			new_arr.add(arr[i]);
+			new_arr.add(this.get(i));
 		}
 		return new_arr;
 	}
