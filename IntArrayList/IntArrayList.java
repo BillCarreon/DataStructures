@@ -1,9 +1,9 @@
 
-public class IntArrayListSolution {
+public class IntArrayList {
 	private int[] arr;
 	private int size;
 
-	public IntArrayListSolution() {
+	public IntArrayList() {
 		arr = new int[10];
 		size = 0;
 	}
@@ -13,12 +13,21 @@ public class IntArrayListSolution {
 	 * post: this list does not contian references to vals
 	 * @param vals is an array of numbers that should be copied into this list
 	 */
-	public IntArrayListSolution(int[] vals) {
+	public IntArrayList(int[] vals) {
 		size = vals.length;
 		arr = new int[size];
 		for(int i = 0; i < size; ++i) {
 			arr[i] = vals[i];
 		}
+	}
+
+	private int[] resize(int[] array){
+		int arr_len = array.length;
+		int[] new_array = new int[2*arr_len];
+		for(int i = 0; i < arr_len; i++){
+			new_array[i] = array[i];
+		}
+		return new_array;
 	}
 
 	/**
@@ -29,21 +38,20 @@ public class IntArrayListSolution {
 		return size;
 	}
 
-	private void resize() {
-		int[] newArr = new int[size() * 2];
-		for(int i = 0; i < size(); ++i) {
-			newArr[i] = arr[i];
-		}
-		arr = newArr;
-	}
-
 	/**
 	 * Add a new element to the end of this list.
 	 * post: the last element of this list is val
 	 * @param val is the element to be added to the end of this list
 	 */
 	public void add(int val) {
-		insert(size(), val);
+		int arr_len = arr.length;
+		
+		if(size == arr_len){
+			arr = resize(arr);		
+		}
+
+		arr[size] = val;
+		size++;
 	}
 
 	/**
@@ -52,7 +60,7 @@ public class IntArrayListSolution {
 	 * @param val is the element to be added to the front of this list
 	 */
 	public void addFront(int val) {
-		insert(0, val);
+		this.insert(0, val);
 	}
 
 	/**
@@ -63,14 +71,18 @@ public class IntArrayListSolution {
 	 * @param pos is the position (index) in the list at which to insert val
 	 */
 	public void insert(int pos, int val) {
-		if (size() == arr.length) {
-			resize();
+		int arr_len = arr.length;
+
+		if(size == arr_len){
+			arr = resize(arr);
+			arr_len = arr.length;		
 		}
-		for(int i = size(); i > pos; --i) {
-			arr[i] = arr[i - 1];
+
+		for(int i = size; i > pos; i--){
+			arr[i] = arr[i-1];
 		}
 		arr[pos] = val;
-		++size;
+		size++;
 	}
 
 	/**
@@ -100,13 +112,17 @@ public class IntArrayListSolution {
 	 * @param val is the element to be removed
 	 * @return true if an element was removed, false otherwise
 	 */
-	public boolean remove(int val) {
-		int pos = indexOf(val);
-		if (pos == -1) {
-			return false;
+	public boolean remove(int val) {		
+		for(int i = 0; i < size; i++){
+			if(arr[i] == val){
+				for(int x = i; x < size-1; x++){
+					arr[x] = arr[x+1];
+				}
+				size--;
+				return true;
+			}
 		}
-		removePos(pos);
-		return true;
+		return false;
 	}
 
 	/**
@@ -115,19 +131,54 @@ public class IntArrayListSolution {
 	 * @param val is the element to be removed
 	 * @return true if an element was removed, false otherwise
 	 */
-	public boolean removeAll(int val) {
+	public boolean removeAll(int val){
 		int i = 0;
 		int j = 0;
-		while(j < size()) {
-			if (arr[j] != val) {
+
+		while(j < size()){
+			if(arr[j] != val){
 				arr[i] = arr[j];
-				++i;
+				i++;
 			}
-			++j;
+			j++;
 		}
-		size -= j - i;
+		size = i;
 		return i != j;
 	}
+
+	// public boolean removeAll2(int val) {
+	// 	boolean changed false;
+	// 	while(this.remove(val)) {
+	// 		changed = true;
+	// 	}
+	// 	return changed;
+	// }
+
+	// public boolean removeAll3(int val) {
+	// 	boolean changed = false;
+	// 	int i = this.indexOf(val);
+	// 	while(i != -1){
+	// 		this.removePos(i);
+	// 		i = this.indexOf(val);
+	// 		changed = true;
+	// 	}
+	// 	return changed;
+	// }
+
+	// public boolean removeAll3(int val) {
+	// 	boolean changed = false;
+	// 	for(int i = 0; i < size; i++){
+	// 		if(arr[i] == val){
+	// 			for(int x = i; x < size-1; x++){
+	// 				arr[x] = arr[x+1];
+	// 			}
+	// 			size--;
+	// 			changed = true;
+	// 			i--;
+	// 		}
+	// 	}
+	// 	return changed;
+	// }
 
 	/**
 	 * Remove the element at a given position, and return that element.
@@ -137,10 +188,10 @@ public class IntArrayListSolution {
 	 */
 	public int removePos(int pos) {
 		int val = arr[pos];
-		for(int i = pos; i < size() - 1; ++i) {
-			arr[i] = arr[i + 1];
+		for(int i = pos; i < size()-1; i++){
+			arr[i] = arr[i+1];
 		}
-		--size;
+		size--;
 		return val;
 	}
 
@@ -150,7 +201,9 @@ public class IntArrayListSolution {
 	 * @return the removed element
 	 */
 	public int removeFront() {
-		return removePos(0);
+		int val = arr[0];
+		removePos(0);
+		return val;
 	}
 
 	/**
@@ -159,7 +212,8 @@ public class IntArrayListSolution {
 	 * @return the removed element
 	 */
 	public int removeBack() {
-		return removePos(size() - 1);
+		size--;
+		return arr[size];
 	}
 
 	/**
@@ -169,12 +223,15 @@ public class IntArrayListSolution {
 	 * @param end is the ending index of the range, exclusive
 	 */
 	public void removeRange(int start, int end) {
-		while(end < size()) {
-			arr[start] = arr[end];
-			++start;
-			++end;
+		int i = start;
+		int j = end;
+
+		while(j < size){
+			arr[i] = arr[j];
+			i++;
+			j++;
 		}
-		size -= end - start;
+		size = i;
 	}
 
 	/**
@@ -183,7 +240,12 @@ public class IntArrayListSolution {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(int val) {
-		return indexOf(val, 0);
+		for(int i = 0; i < size; i++){
+			if(arr[i] == val){
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -195,8 +257,8 @@ public class IntArrayListSolution {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(int val, int pos) {
-		for(int i = pos; i < size(); ++i) {
-			if (arr[i] == val) {
+		for(int i = pos; i < size; i++){
+			if(arr[i] == val){
 				return i;
 			}
 		}
@@ -208,38 +270,39 @@ public class IntArrayListSolution {
 	 * post: size() = 0
 	 */
 	public void clear() {
+		// arr = new int[10];
 		size = 0;
 	}
 
 	/**
-	 * Create a new IntArrayListSolution that is a contiguous sublist of this list
+	 * Create a new IntArrayList that is a contiguous sublist of this list
 	 * pre: 0 <= start <= end <= size()
 	 * post: this list is unchanged
 	 * @param start is the starting index of the range, inclusive
 	 * @param end is the ending index of the range, exclusive
-	 * @return new IntArrayListSolution
+	 * @return new IntArrayList
 	 */
-	public IntArrayListSolution getSubList(int start, int end) {
-		int[] subArr = new int[end - start];
-		for(int i = 0; i < end - start; ++i) {
-			subArr[i] = arr[start + i];
+	public IntArrayList getSubList(int start, int end) {
+		IntArrayList new_arr = new IntArrayList();
+		for(int i = start; i < end; i ++){
+			new_arr.add(this.get(i));
 		}
-		return new IntArrayListSolution(subArr);
+		return new_arr;
 	}
 
 	/**
 	 * Check if this list is equal to another Object
 	 * @param other is any Object
-	 * @return true if other is also an IntArrayListSolution and has the same elements in
+	 * @return true if other is also an IntArrayList and has the same elements in
 	 * the same order as this list.
 	 */
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof IntArrayListSolution)) {
+		if (other == null || !(other instanceof IntArrayList)) {
 			return false;
 		}
 
-		// cast other to type IntArrayListSolution
-		IntArrayListSolution otherList = (IntArrayListSolution)other;
+		// cast other to type IntArrayList
+		IntArrayList otherList = (IntArrayList)other;
 
 		// If the two lists are equal, they must
 		// have the same number of elements.
@@ -255,7 +318,6 @@ public class IntArrayListSolution {
 
 		return true;
 	}
-
 
 	public String toString() {
 	    StringBuilder result = new StringBuilder(size() + 2);
