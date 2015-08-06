@@ -23,13 +23,21 @@ public class GenericArrayList<E> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void resize(){
+		E[] new_arr = (E[]) new Object[size()*2];
+		for(int i = 0; i < size(); ++i) {
+			new_arr[i] = arr[i];
+		}
+		arr = new_arr;
+	}
+
 	/**
 	 * Return the number of elements in this list
 	 * @return the number of elements in this list
 	 */
 	public int size() {
-		// your code here
-		return -1;
+		return size;
 	}
 
 	/**
@@ -38,7 +46,7 @@ public class GenericArrayList<E> {
 	 * @param val is the element to be added to the end of this list
 	 */
 	public void add(E val) {
-		// your code here
+		insert(size(), val);
 	}
 
 	/**
@@ -49,7 +57,15 @@ public class GenericArrayList<E> {
 	 * @param pos is the position (index) in the list at which to insert val
 	 */
 	public void insert(int pos, E val) {
-		// your code here
+		if(size() == arr.length){
+			resize();		
+		}
+
+		for(int i = size(); i > pos; --i){
+			arr[i] = arr[i-1];
+		}
+		arr[pos] = val;
+		++size;
 	}
 
 	/**
@@ -59,8 +75,7 @@ public class GenericArrayList<E> {
 	 * @return the element at the given index in this list
 	 */
 	public E get(int pos) {
-		// your code here
-		return null;
+		return arr[pos];
 	}
 
 	/**
@@ -70,7 +85,15 @@ public class GenericArrayList<E> {
 	 * @return true if an element was removed, false otherwise
 	 */
 	public boolean remove(E val) {
-		// your code here
+		for(int i = 0; i < size(); ++i){
+			if(arr[i].equals(val)){
+				for(int x = i; x < size()-1; ++x){
+					arr[x] = arr[x+1];
+				}
+				size--;
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -81,8 +104,12 @@ public class GenericArrayList<E> {
 	 * @return the removed element
 	 */
 	public E removePos(int pos) {
-		// your code here
-		return null;
+		E val = arr[pos];
+		for(int i = pos; i < size()-1; ++i){
+			arr[i] = arr[i+1];
+		}
+		--size;
+		return val;
 	}
 
 	/**
@@ -91,7 +118,11 @@ public class GenericArrayList<E> {
 	 * @return the index of val, or -1 if val is not in the list
 	 */
 	public int indexOf(E val) {
-		// your code here
+		for(int i = 0; i < size(); ++i){
+			if(arr[i].equals(val)){
+				return i;
+			}
+		}
 		return -1;
 	}
 
@@ -100,7 +131,7 @@ public class GenericArrayList<E> {
 	 * post: size() = 0
 	 */
 	public void clear() {
-		// your code here
+		size = 0;
 	}
 
 	/**
@@ -124,7 +155,8 @@ public class GenericArrayList<E> {
 		}
 
 		for(int i = 0; i < this.size(); i++) {
-			if (this.get(i) != otherList.get(i)) {
+			if(!this.get(i).equals(otherList.get(i))){
+			//if (this.get(i) != otherList.get(i)) {
 				return false;
 			}
 		}
