@@ -155,8 +155,7 @@ public class GenericArrayList<E> {
 		}
 
 		for(int i = 0; i < this.size(); i++) {
-			if(!this.get(i).equals(otherList.get(i))){
-			//if (this.get(i) != otherList.get(i)) {
+			if (!this.get(i).equals(otherList.get(i))) {
 				return false;
 			}
 		}
