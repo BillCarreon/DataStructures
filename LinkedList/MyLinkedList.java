@@ -18,14 +18,6 @@ import java.lang.IllegalStateException;
  */
 public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 
-	/*
-	 *node.data
-	 *node.data = x;
-	 * vs.
-	 *node.getData();
-	 *node.setData(x);
-	*/
-
 	private class Node {
 		//data, next, previous
 		E data;
@@ -38,8 +30,8 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 */
 	private class MyIterator implements Iterator<E> {
 
-		Node position;
-		boolean can_call_remove = false;
+		Node pos;
+		boolean call_remove = false;
 
 		/**
 		 * Constructor
@@ -47,7 +39,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 * O(1)
 		 */
 		public MyIterator() {
-			position = head;
+			pos = head;
 		}
 
 		/**
@@ -57,7 +49,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 * O(1)
 		 */
 		public boolean hasNext() {
-			return position.next != tail;
+			return pos.next != tail;
 		}
 
 		/**
@@ -69,9 +61,9 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 */
 		public E next() {
 			if(hasNext()){
-				can_call_remove = true;
-				position = position.next;
-				return position.data;
+				call_remove = true;
+				pos = pos.next;
+				return pos.data;
 			}
 			throw new NoSuchElementException();
 		}
@@ -90,13 +82,13 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 * O(1)
 		 */
 		public void remove() {
-			if(!can_call_remove){
+			if(!call_remove){
 				throw new IllegalStateException();
 			}
-			can_call_remove = false;
-			position.previous.next = position.next;
-			position.next.previous = position.previous;
-			position = position.previous;
+			call_remove = false;
+			pos.previous.next = pos.next;
+			pos.next.previous = pos.previous;
+			pos = pos.previous;
 
 		}
 
@@ -105,6 +97,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	private Node head;
 	private Node tail;
 	private int size;
+	private Node pos;
 
 	/**
 	 * Constructor
@@ -128,7 +121,6 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		size = 0;
 		for(int i = 0; i < elements.length; ++i) {
 			add(elements[i]);
-			++size;
 		}
 	}
 
@@ -138,13 +130,24 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(1)
 	 */
 	public boolean add(E element) {
-		//your code here
-		return false;
+		//int size = size();
+		//add(int size,E element);
+		pos = tail.previous;
+
+		Node new_node = new Node();
+		new_node.next = pos.next;
+		new_node.previous = pos.next.previous;
+
+		new_node.previous.next = new_node;
+		new_node.next.previous = new_node;
+		//setPointers(new_node);
+		++size;
+		return true;
 	}
 
 	/**
-	 * Inserts the specified element at the specified position in this list.
-	 * Shifts the element currently at that position (if any) and any subsequent
+	 * Inserts the specified element at the specified pos in this list.
+	 * Shifts the element currently at that pos (if any) and any subsequent
 	 * elements to the right (adds one to their indices).
 	 *
 	 * Throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > size())
@@ -152,9 +155,9 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public void add(int index, E element) {
-		if(index > size()){
-			throw new IndexOutOfBoundsException();
-		}
+		 if(index < 0 || index >= size()){
+		 	throw new IndexOutOfBoundsException();
+		 }
 	}
 
 	/**
@@ -178,7 +181,8 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(1)
 	 */
 	public void clear() {
-		// your code here
+		head.next = tail;
+		tail.previous = head;
 	}
 
 	/**
@@ -187,7 +191,16 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public boolean contains(Object obj) {
-		// your code here
+		/*
+		 *Iterator<E> iterator = iterator();
+		 *pos = head;
+		 *while(pos.next != tail){
+		 *	if(pos.data == element){
+		 *		return true;
+		 *	}
+		 *	iterator.next();
+		 *}
+		 */
 		return false;
 	}
 
@@ -203,13 +216,22 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	}
 
 	/**
-	 * Returns the element at the specified position in this list.
+	 * Returns the element at the specified pos in this list.
 	 * Throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= size())
 	 *
 	 * O(n)
 	 */
 	public E get(int index) {
-		// your code here
+		/* if(index < 0 || index >= size()){
+		 * 	throw new IndexOutOfBoundsException();
+		 * }
+		 *
+		 * Iterator<E> itr = iterator();
+		 * while(true){
+		 * 	if(itr)
+		 * 	itr.next();
+		 * }
+		 */
 		return null;
 	}
 
@@ -230,7 +252,9 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(1)
 	 */
 	public boolean isEmpty() {
-		// your code here
+		if(size() == 0){
+			return true;
+		}
 		return false;
 	}
 
@@ -255,7 +279,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	}
 
 	/**
-	 * Removes the element at the specified position in this list. Shifts any
+	 * Removes the element at the specified pos in this list. Shifts any
 	 * subsequent elements to the left (subtracts one from their indices).
 	 * Returns the element that was removed from the list.
 	 *
@@ -264,8 +288,22 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public E remove(int index) {
-		// your code here
-		return null;
+
+		if(index < 0 || index >= size()){
+			throw new IndexOutOfBoundsException();
+		}
+
+		Iterator<E> itr = iterator();
+		E removed;
+		
+		for(int i = 0; i < index; ++i){
+			itr.next();
+		}
+
+		removed = itr.next();
+		itr.remove();
+		
+		return removed;
 	}
 
 	/**
@@ -308,7 +346,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	}
 
 	/**
-	 * Replaces the element at the specified position in this list with the specified element.
+	 * Replaces the element at the specified pos in this list with the specified element.
 	 * Throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= size())
 	 *
 	 * O(n)
@@ -316,6 +354,17 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	public E set(int index, E element) {
 		// your code here
 		return null;
+	}
+
+	/*
+	 *Sets the "previous" and "next" pointers of the New node and repalces like pointers of 
+	 *the Previous and Next nodes.
+	 */
+	public void setPointers(Node new_node){
+		new_node.next = pos.next;
+		new_node.previous = pos.next.previous;
+		new_node.previous.next = new_node;
+		new_node.next.previous = new_node;
 	}
 
 	/**
