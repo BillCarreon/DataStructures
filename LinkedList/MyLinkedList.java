@@ -32,7 +32,6 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 
 		Node pos;
 		boolean call_remove = false;
-
 		/**
 		 * Constructor
 		 *
@@ -53,7 +52,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		}
 
 		/**
-		 * Returns the next element in the iteration.
+		 * Returns the next element in the iteration and advances the iterator.
 		 *
 		 * Throws NoSuchElementException if the iteration has no more elements.
 		 *

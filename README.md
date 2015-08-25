@@ -41,3 +41,19 @@ Objectives:
 * Interfaces
 * Iterators
 * Argument checking and throwing Exceptions
+
+Stack
+-----
+`MyStack.java` defines a simple stack, which implements only the classic methods `push()`, `pop()`, `peek()`, and `isEmpty()`. There are multiple correct ways to implement a stack, but the solution uses an ArrayList under the hood.
+
+Objectives:
+* Stack data structure
+* Using one data structure to implement another
+
+Queue
+-----
+`MyQueue.java` defines a simple queue, which implements only the classic methods `add()`, `remove()`, `peek()`, and `isEmpty()`. There are multiple correct ways to implement a queue, but the solution uses a LinkedList under the hood.
+
+Objectives:
+* Queue data structure
+* Using one data structure to implement another
