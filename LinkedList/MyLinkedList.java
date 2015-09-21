@@ -31,7 +31,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	private class MyIterator implements Iterator<E> {
 
 		Node pos;
-		boolean call_remove = false;
+		boolean can_remove = false;
 		/**
 		 * Constructor
 		 *
@@ -60,7 +60,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 */
 		public E next() {
 			if(hasNext()){
-				call_remove = true;
+				can_remove = true;
 				pos = pos.next;
 				return pos.data;
 			}
@@ -81,13 +81,15 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 		 * O(1)
 		 */
 		public void remove() {
-			if(!call_remove){
+			if(!can_remove){
 				throw new IllegalStateException();
 			}
-			call_remove = false;
+			can_remove = false;
 			pos.previous.next = pos.next;
 			pos.next.previous = pos.previous;
 			pos = pos.previous;
+
+			--size;
 
 		}
 
@@ -129,18 +131,9 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(1)
 	 */
 	public boolean add(E element) {
-		//int size = size();
-		//add(int size,E element);
-		pos = tail.previous;
+		
+		add(size(),element);
 
-		Node new_node = new Node();
-		new_node.next = pos.next;
-		new_node.previous = pos.next.previous;
-
-		new_node.previous.next = new_node;
-		new_node.next.previous = new_node;
-		//setPointers(new_node);
-		++size;
 		return true;
 	}
 
@@ -154,9 +147,36 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public void add(int index, E element) {
-		 if(index < 0 || index >= size()){
-		 	throw new IndexOutOfBoundsException();
-		 }
+		if(index < 0 || size() < index){
+			throw new IndexOutOfBoundsException();
+		}
+
+
+		if(index < size()/2){
+			pos = head;
+
+			for(int i = 0; i < index; ++i){
+				pos = pos.next;
+		 	}
+		}
+
+		else{
+			pos = tail.previous;
+
+		 	for(int i = size(); i > index; --i){
+		 		pos = pos.previous;
+		 	}
+		}
+
+		Node new_node = new Node();
+
+		new_node.data = element;
+		new_node.next = pos.next;
+		new_node.previous = pos;
+		new_node.previous.next = new_node;
+		new_node.next.previous = new_node;
+
+		++size;
 	}
 
 	/**
@@ -166,11 +186,20 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * is undefined if the specified collection is modified while the operation
 	 * is in progress.
 	 *
+	 * Returns true if the list has changed. 
+	 *
 	 * O(c) where c is the number of elements in the Collection
 	 */
 	public boolean addAll(Collection<? extends E> c) {
-		// your code here
-		return false;
+		if(c.size() <= 0){
+			return false;
+		}
+
+		for(E element : c){
+			add(element);
+		}
+
+		return true;
 	}
 
 	/**
@@ -182,6 +211,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	public void clear() {
 		head.next = tail;
 		tail.previous = head;
+		size = 0;
 	}
 
 	/**
@@ -190,16 +220,13 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public boolean contains(Object obj) {
-		/*
-		 *Iterator<E> iterator = iterator();
-		 *pos = head;
-		 *while(pos.next != tail){
-		 *	if(pos.data == element){
-		 *		return true;
-		 *	}
-		 *	iterator.next();
-		 *}
-		 */
+		// return indexOf(obj) != -1;
+		for(E element: this) {
+			if(element.equals(obj)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -210,8 +237,13 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n^2) time, O(1) space
 	 */
 	public boolean containsAll(Collection<?> c) {
-		// your code here
-		return false;
+		
+		for(Object element : c){
+			if(!contains(element)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -221,17 +253,17 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public E get(int index) {
-		/* if(index < 0 || index >= size()){
-		 * 	throw new IndexOutOfBoundsException();
-		 * }
-		 *
-		 * Iterator<E> itr = iterator();
-		 * while(true){
-		 * 	if(itr)
-		 * 	itr.next();
-		 * }
-		 */
-		return null;
+		if(index < 0 || size() <= index){
+			throw new IndexOutOfBoundsException();
+		}
+		
+		pos = head.next;
+
+		for(int i = 0; i < index; ++i){
+			pos = pos.next;
+		}
+
+		return pos.data;
 	}
 
 	/**
@@ -241,7 +273,15 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public int indexOf(Object obj) {
-		// your code here
+		
+		pos = head.next;
+
+		for(int i = 0; i < size(); ++i){
+			if(pos.data.equals(obj)){
+				return i;
+			}
+			pos = pos.next;
+		}
 		return -1;
 	}
 
@@ -251,10 +291,8 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(1)
 	 */
 	public boolean isEmpty() {
-		if(size() == 0){
-			return true;
-		}
-		return false;
+		
+		return size() == 0;
 	}
 
 	/**
@@ -273,7 +311,15 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public int lastIndexOf(Object obj) {
-		// your code here
+		
+		pos = tail.previous;
+
+		for(int i = size()-1; i >= 0; --i){
+			if(pos.data.equals(obj)){
+				return i;
+			}
+			pos = pos.previous;
+		}
 		return -1;
 	}
 
@@ -301,7 +347,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 
 		removed = itr.next();
 		itr.remove();
-		
+
 		return removed;
 	}
 
@@ -314,8 +360,24 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public boolean remove(Object obj) {
-		// your code here
-		return false;
+
+		int idx = indexOf(obj);
+
+		if(-1 != idx){
+			remove(idx);
+		}
+
+		return -1 != idx;
+
+
+		//Iterator itr = iterator();
+		//for(int i = 0; i < size(); ++i){
+		//	if(itr.next().equals(obj)){
+		//		itr.remove();
+		//		return true;
+		//	}
+		//}
+		//return false;
 	}
 
 	/**
@@ -328,8 +390,19 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * If c.contains() is O(log C) then removeAll() is O(n*log C)	Ex. Sorted ArrayList or binary search tree
 	 */
 	public boolean removeAll(Collection<?> c) {
-		// your code here
-		return false;
+		
+		boolean changed = false;
+
+		Iterator itr = iterator();
+
+		while(itr.hasNext()){
+			if(c.contains(itr.next())){
+				itr.remove();
+				changed = true;
+			}
+		}
+
+		return changed;
 	}
 
 	/**
@@ -340,8 +413,19 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * same complexity as removeAll()
 	 */
 	public boolean retainAll(Collection<?> c) {
-		// your code here
-		return false;
+		
+		boolean changed = false;
+
+		Iterator itr = iterator();
+
+		while(itr.hasNext()){
+			if(!c.contains(itr.next())){
+				itr.remove();
+				changed = true;
+			}
+		}
+
+		return changed;
 	}
 
 	/**
@@ -351,19 +435,28 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public E set(int index, E element) {
-		// your code here
-		return null;
-	}
+		if(index < 0 || index >= size()){
+			throw new IndexOutOfBoundsException();
+		}
 
-	/*
-	 *Sets the "previous" and "next" pointers of the New node and repalces like pointers of 
-	 *the Previous and Next nodes.
-	 */
-	public void setPointers(Node new_node){
-		new_node.next = pos.next;
-		new_node.previous = pos.next.previous;
-		new_node.previous.next = new_node;
-		new_node.next.previous = new_node;
+		if(index < size()/2){
+			pos = head.next;
+			for(int i = 0; i < index; ++i){
+				pos = pos.next;
+		 	}
+		}
+
+		else{
+			pos = tail.previous;
+		 	for(int i = size()-1; i > index; --i){
+		 		pos = pos.previous;
+		 	}
+		}
+
+		E old = pos.data;
+		pos.data = element;
+
+		return old;
 	}
 
 	/**
@@ -385,8 +478,17 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	 * O(n)
 	 */
 	public Object[] toArray() {
-		// your code here
-		return null;
+		
+		Object[] arr = new Object[size()];
+
+		int counter = 0;
+
+		for(E element: this){
+			arr[counter] = element;
+			++counter;
+		}
+
+		return arr;
 	}
 
 	/**
@@ -431,7 +533,7 @@ public class MyLinkedList<E> implements MyList<E>, Iterable<E> {
 	    StringBuilder result = new StringBuilder(size() + 2);
 	    result.append("[");
 	    for(E element : this) {
-	    	result.append(element.toString() + ", ");
+	    	result.append(element/*.toString()*/ + ", ");
 	    }
 	    result.append("]");
 	    return result.toString();

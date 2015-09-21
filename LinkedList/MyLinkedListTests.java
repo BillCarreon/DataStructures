@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -284,6 +283,7 @@ public class MyLinkedListTests {
 
 		sList1 = new MyLinkedList<String>();
 		test("contains(Object obj) 11", sList1.contains(""), false);
+
 
 		sList1.add("");
 		sList1.add("burrito");
