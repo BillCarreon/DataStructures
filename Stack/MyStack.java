@@ -31,8 +31,7 @@ public class MyStack<E> implements MyStackInterface<E> {
 	 * O(1)
 	 */
 	public boolean isEmpty() {
-		// your code here
-		return false;
+		return arr.size() <= 0;
 	}
 
 	/**
@@ -43,8 +42,10 @@ public class MyStack<E> implements MyStackInterface<E> {
 	 * O(1)
 	 */
 	public E peek() {
-		// your code here
-		return null;
+		if(arr.isEmpty()){
+			throw new EmptyStackException();
+		}
+		return arr.get(arr.size()-1);
 	}
 
 	/**
@@ -55,8 +56,11 @@ public class MyStack<E> implements MyStackInterface<E> {
 	 * O(1)
 	 */
 	public E pop() {
-		// your code here
-		return null;
+		if(arr.isEmpty()){
+			throw new EmptyStackException();
+		}
+		
+		return arr.remove(arr.size()-1);
 	}
 
 	/**
@@ -67,8 +71,10 @@ public class MyStack<E> implements MyStackInterface<E> {
 	 * O(1)
 	 */
 	public E push(E item) {
-		// your code here
-		return null;
+
+		arr.add(item);
+
+		return item;
 	}
 
 }

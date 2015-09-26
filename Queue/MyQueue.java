@@ -7,8 +7,9 @@ public class MyQueue<E> implements MyQueueInterface<E> {
 
 	private LinkedList<E> list;
 
+
 	public MyQueue() {
-		// your code here
+		list = new LinkedList();
 	}
 
 	/**
@@ -18,7 +19,7 @@ public class MyQueue<E> implements MyQueueInterface<E> {
 	 * O(1)
 	 */
 	public void add(E element) {
-		// your code here
+		list.add(element);
 	}
 
 	/**
@@ -28,8 +29,7 @@ public class MyQueue<E> implements MyQueueInterface<E> {
 	 * O(1)
 	 */
 	public boolean isEmpty() {
-		// your code here
-		return false;
+		return list.size() <= 0;
 	}
 
 	/**
@@ -40,8 +40,10 @@ public class MyQueue<E> implements MyQueueInterface<E> {
 	 * O(1)
 	 */
 	public E peek() {
-		// your code here
-		return null;
+		if(this.isEmpty()){
+			throw new NoSuchElementException();
+		}
+		return list.peek();
 	}
 
 	/**
@@ -52,7 +54,6 @@ public class MyQueue<E> implements MyQueueInterface<E> {
 	 * O(1)
 	 */
 	public E remove() {
-		// your code here
-		return null;
+		return list.remove();
 	}
 }
